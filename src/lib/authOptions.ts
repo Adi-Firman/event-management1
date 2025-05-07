@@ -1,19 +1,7 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import GoogleProvider from "next-auth/providers/google"
-import prisma from "./prisma"
-import type { NextAuthOptions, Session } from "next-auth"
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string | null;
-      role?: string | null;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-    };
-  }
-}
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
+import { NextAuthOptions } from "next-auth"
+import GoogleProvider from "next-auth/providers/google" // contoh provider
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -24,23 +12,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-        token.role = (user as any).role  // pastikan `role` ada di DB
-      }
-      return token
-    },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role
+      if (token.sub && session.user) {
+        session.user.id = token.sub
       }
       return session
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
 }
