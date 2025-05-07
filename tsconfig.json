@@ -15,7 +15,7 @@
     "strict": false,
     "noEmit": true,
     "incremental": true,
-    "module": "esnext",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
