@@ -1,24 +1,16 @@
-'use client'
+'use client'; // Penting untuk komponen interaktif
 
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'; // Perhatikan import dari 'next/navigation'
 
-export default function AuthButton() {
-  const { data: session } = useSession()
-
-  if (session) {
-    return (
-      <div className="flex items-center gap-2">
-        <span>{session.user?.name}</span>
-        <button onClick={() => signOut()} className="text-blue-600">
-          Logout
-        </button>
-      </div>
-    )
-  }
+export default function LoginButton() {
+  const router = useRouter();
 
   return (
-    <button onClick={() => signIn('google')} className="text-blue-600">
-      Login dengan Google
+    <button
+      onClick={() => router.push('/login')}
+      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+    >
+      Login
     </button>
-  )
+  );
 }
