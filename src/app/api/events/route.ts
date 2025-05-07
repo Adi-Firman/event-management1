@@ -1,7 +1,7 @@
 // src/app/api/events/route.ts
 
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
 import { createClient } from '@supabase/supabase-js'
 import { randomUUID } from 'crypto'
 import { getServerSession } from "next-auth"
