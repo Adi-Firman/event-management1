@@ -1,36 +1,26 @@
-// src/lib/auth.ts
-import { AuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { prisma } from './prisma'
-import bcrypt from 'bcrypt'
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "./prisma"
 
-export const authOptions: AuthOptions = {
+export const authOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials) {
-        const user = await prisma.user.findUnique({ where: { email: credentials?.email } })
-        if (!user || !credentials?.password || !await bcrypt.compare(credentials.password, user.password)) {
-          return null
-        }
-        return user
-      }
-    })
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
-  pages: {
-    signIn: '/login',
-  },
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
     async session({ session, token }) {
-      if (token.sub) session.user.id = token.sub
+      if (session.user) {
+        session.user.id = token.sub // inject user id ke session
+      }
       return session
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 }

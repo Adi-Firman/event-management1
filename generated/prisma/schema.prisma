@@ -35,4 +35,5 @@ model Event {
   image         String?
   organizer     User     @relation(fields: [organizerId], references: [id])
   organizerId   String
+  createdAt     DateTime @default(now())
 }

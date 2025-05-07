@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 
 export default function CreateEventPage() {
   const router = useRouter()
-
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -16,7 +15,6 @@ export default function CreateEventPage() {
     endDate: '',
     availableSeat: '',
   })
-
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -26,9 +24,7 @@ export default function CreateEventPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
-    }
+    if (file) setImageFile(file)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,76 +46,73 @@ export default function CreateEventPage() {
       })
 
       const data = await res.json()
-
       if (!res.ok) {
         alert(data.error || 'Gagal menambahkan event')
       } else {
         alert('Event berhasil ditambahkan!')
         router.push('/dashboard/organizer/events')
       }
-    } catch (err) {
-      console.error(err)
-      alert('Terjadi kesalahan')
+    } catch (error) {
+      console.error(error)
+      alert('Terjadi kesalahan saat mengirim data.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6 text-center">Tambah Event</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-xl shadow-md">
-        {[
-          { label: 'Judul Event', name: 'title', type: 'text' },
-          { label: 'Lokasi', name: 'location', type: 'text' },
-          { label: 'Kategori', name: 'category', type: 'text' },
-          { label: 'Harga', name: 'price', type: 'number' },
-          { label: 'Tanggal Mulai', name: 'startDate', type: 'datetime-local' },
-          { label: 'Tanggal Selesai', name: 'endDate', type: 'datetime-local' },
-          { label: 'Kursi Tersedia', name: 'availableSeat', type: 'number' },
-        ].map(({ label, name, type }) => (
-          <div key={name}>
-            <label className="block text-sm font-semibold mb-1">{label}</label>
-            <input
-              type={type}
+    <form onSubmit={handleSubmit} className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow space-y-4">
+      <h1 className="text-2xl font-bold text-center">Tambah Event Baru</h1>
+      {[
+        { label: 'Judul', name: 'title', type: 'text' },
+        { label: 'Deskripsi', name: 'description', type: 'textarea' },
+        { label: 'Lokasi', name: 'location', type: 'text' },
+        { label: 'Kategori', name: 'category', type: 'text' },
+        { label: 'Harga', name: 'price', type: 'number' },
+        { label: 'Tanggal Mulai', name: 'startDate', type: 'datetime-local' },
+        { label: 'Tanggal Selesai', name: 'endDate', type: 'datetime-local' },
+        { label: 'Kursi Tersedia', name: 'availableSeat', type: 'number' },
+      ].map(({ label, name, type }) => (
+        <div key={name}>
+          <label className="block text-sm font-medium text-gray-700">{label}</label>
+          {type === 'textarea' ? (
+            <textarea
               name={name}
-              value={form[name as keyof typeof form]}
               onChange={handleChange}
-              className="w-full border px-4 py-2 rounded-lg focus:ring focus:outline-none"
+              value={(form as any)[name]}
+              className="w-full border border-gray-300 rounded px-4 py-2 mt-1"
               required
             />
-          </div>
-        ))}
-
-        <div>
-          <label className="block text-sm font-semibold mb-1">Deskripsi</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            className="w-full border px-4 py-2 rounded-lg focus:ring focus:outline-none"
-            required
-          />
+          ) : (
+            <input
+              name={name}
+              type={type}
+              onChange={handleChange}
+              value={(form as any)[name]}
+              className="w-full border border-gray-300 rounded px-4 py-2 mt-1"
+              required
+            />
+          )}
         </div>
+      ))}
 
-        <div>
-          <label className="block text-sm font-semibold mb-1">Gambar Event</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full border px-4 py-2 rounded-lg"
-          />
-        </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Gambar</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="w-full border border-gray-300 rounded px-4 py-2 mt-1"
+        />
+      </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isSubmitting ? 'Mengirim...' : 'Tambah Event'}
-        </button>
-      </form>
-    </div>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+      >
+        {isSubmitting ? 'Mengirim...' : 'Tambah Event'}
+      </button>
+    </form>
   )
 }

@@ -2081,6 +2081,7 @@ export namespace Prisma {
     availableSeat: number | null
     image: string | null
     organizerId: string | null
+    createdAt: Date | null
   }
 
   export type EventMaxAggregateOutputType = {
@@ -2095,6 +2096,7 @@ export namespace Prisma {
     availableSeat: number | null
     image: string | null
     organizerId: string | null
+    createdAt: Date | null
   }
 
   export type EventCountAggregateOutputType = {
@@ -2109,6 +2111,7 @@ export namespace Prisma {
     availableSeat: number
     image: number
     organizerId: number
+    createdAt: number
     _all: number
   }
 
@@ -2135,6 +2138,7 @@ export namespace Prisma {
     availableSeat?: true
     image?: true
     organizerId?: true
+    createdAt?: true
   }
 
   export type EventMaxAggregateInputType = {
@@ -2149,6 +2153,7 @@ export namespace Prisma {
     availableSeat?: true
     image?: true
     organizerId?: true
+    createdAt?: true
   }
 
   export type EventCountAggregateInputType = {
@@ -2163,6 +2168,7 @@ export namespace Prisma {
     availableSeat?: true
     image?: true
     organizerId?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -2264,6 +2270,7 @@ export namespace Prisma {
     availableSeat: number
     image: string | null
     organizerId: string
+    createdAt: Date
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -2297,6 +2304,7 @@ export namespace Prisma {
     availableSeat?: boolean
     image?: boolean
     organizerId?: boolean
+    createdAt?: boolean
     organizer?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -2312,6 +2320,7 @@ export namespace Prisma {
     availableSeat?: boolean
     image?: boolean
     organizerId?: boolean
+    createdAt?: boolean
     organizer?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -2327,6 +2336,7 @@ export namespace Prisma {
     availableSeat?: boolean
     image?: boolean
     organizerId?: boolean
+    createdAt?: boolean
     organizer?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -2342,9 +2352,10 @@ export namespace Prisma {
     availableSeat?: boolean
     image?: boolean
     organizerId?: boolean
+    createdAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "location" | "category" | "price" | "startDate" | "endDate" | "availableSeat" | "image" | "organizerId", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "location" | "category" | "price" | "startDate" | "endDate" | "availableSeat" | "image" | "organizerId" | "createdAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organizer?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2372,6 +2383,7 @@ export namespace Prisma {
       availableSeat: number
       image: string | null
       organizerId: string
+      createdAt: Date
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -2807,6 +2819,7 @@ export namespace Prisma {
     readonly availableSeat: FieldRef<"Event", 'Int'>
     readonly image: FieldRef<"Event", 'String'>
     readonly organizerId: FieldRef<"Event", 'String'>
+    readonly createdAt: FieldRef<"Event", 'DateTime'>
   }
     
 
@@ -3256,7 +3269,8 @@ export namespace Prisma {
     endDate: 'endDate',
     availableSeat: 'availableSeat',
     image: 'image',
-    organizerId: 'organizerId'
+    organizerId: 'organizerId',
+    createdAt: 'createdAt'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -3415,6 +3429,7 @@ export namespace Prisma {
     availableSeat?: IntFilter<"Event"> | number
     image?: StringNullableFilter<"Event"> | string | null
     organizerId?: StringFilter<"Event"> | string
+    createdAt?: DateTimeFilter<"Event"> | Date | string
     organizer?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -3430,6 +3445,7 @@ export namespace Prisma {
     availableSeat?: SortOrder
     image?: SortOrderInput | SortOrder
     organizerId?: SortOrder
+    createdAt?: SortOrder
     organizer?: UserOrderByWithRelationInput
   }
 
@@ -3448,6 +3464,7 @@ export namespace Prisma {
     availableSeat?: IntFilter<"Event"> | number
     image?: StringNullableFilter<"Event"> | string | null
     organizerId?: StringFilter<"Event"> | string
+    createdAt?: DateTimeFilter<"Event"> | Date | string
     organizer?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -3463,6 +3480,7 @@ export namespace Prisma {
     availableSeat?: SortOrder
     image?: SortOrderInput | SortOrder
     organizerId?: SortOrder
+    createdAt?: SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -3485,6 +3503,7 @@ export namespace Prisma {
     availableSeat?: IntWithAggregatesFilter<"Event"> | number
     image?: StringNullableWithAggregatesFilter<"Event"> | string | null
     organizerId?: StringWithAggregatesFilter<"Event"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -3551,6 +3570,7 @@ export namespace Prisma {
     endDate: Date | string
     availableSeat: number
     image?: string | null
+    createdAt?: Date | string
     organizer: UserCreateNestedOneWithoutEventsInput
   }
 
@@ -3566,6 +3586,7 @@ export namespace Prisma {
     availableSeat: number
     image?: string | null
     organizerId: string
+    createdAt?: Date | string
   }
 
   export type EventUpdateInput = {
@@ -3579,6 +3600,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizer?: UserUpdateOneRequiredWithoutEventsNestedInput
   }
 
@@ -3594,6 +3616,7 @@ export namespace Prisma {
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
     organizerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventCreateManyInput = {
@@ -3608,6 +3631,7 @@ export namespace Prisma {
     availableSeat: number
     image?: string | null
     organizerId: string
+    createdAt?: Date | string
   }
 
   export type EventUpdateManyMutationInput = {
@@ -3621,6 +3645,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventUncheckedUpdateManyInput = {
@@ -3635,6 +3660,7 @@ export namespace Prisma {
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
     organizerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3760,6 +3786,7 @@ export namespace Prisma {
     availableSeat?: SortOrder
     image?: SortOrder
     organizerId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EventAvgOrderByAggregateInput = {
@@ -3779,6 +3806,7 @@ export namespace Prisma {
     availableSeat?: SortOrder
     image?: SortOrder
     organizerId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EventMinOrderByAggregateInput = {
@@ -3793,6 +3821,7 @@ export namespace Prisma {
     availableSeat?: SortOrder
     image?: SortOrder
     organizerId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EventSumOrderByAggregateInput = {
@@ -4071,6 +4100,7 @@ export namespace Prisma {
     endDate: Date | string
     availableSeat: number
     image?: string | null
+    createdAt?: Date | string
   }
 
   export type EventUncheckedCreateWithoutOrganizerInput = {
@@ -4084,6 +4114,7 @@ export namespace Prisma {
     endDate: Date | string
     availableSeat: number
     image?: string | null
+    createdAt?: Date | string
   }
 
   export type EventCreateOrConnectWithoutOrganizerInput = {
@@ -4127,6 +4158,7 @@ export namespace Prisma {
     availableSeat?: IntFilter<"Event"> | number
     image?: StringNullableFilter<"Event"> | string | null
     organizerId?: StringFilter<"Event"> | string
+    createdAt?: DateTimeFilter<"Event"> | Date | string
   }
 
   export type UserCreateWithoutEventsInput = {
@@ -4184,6 +4216,7 @@ export namespace Prisma {
     endDate: Date | string
     availableSeat: number
     image?: string | null
+    createdAt?: Date | string
   }
 
   export type EventUpdateWithoutOrganizerInput = {
@@ -4197,6 +4230,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventUncheckedUpdateWithoutOrganizerInput = {
@@ -4210,6 +4244,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventUncheckedUpdateManyWithoutOrganizerInput = {
@@ -4223,6 +4258,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     availableSeat?: IntFieldUpdateOperationsInput | number
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

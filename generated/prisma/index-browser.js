@@ -138,7 +138,8 @@ exports.Prisma.EventScalarFieldEnum = {
   endDate: 'endDate',
   availableSeat: 'availableSeat',
   image: 'image',
-  organizerId: 'organizerId'
+  organizerId: 'organizerId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {

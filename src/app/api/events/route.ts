@@ -1,46 +1,68 @@
 // src/app/api/events/route.ts
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { supabase } from '@/lib/supabase';
 
-export const config = {
-  api: { bodyParser: false },
-};
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { createClient } from '@supabase/supabase-js'
+import { randomUUID } from 'crypto'
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 
-export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const formData = await request.formData();
-  const title = formData.get('title') as string;
-  const image = formData.get('image') as File;
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
-  let imageUrl = null;
-  if (image) {
-    const filePath = `events/${session.user.id}-${Date.now()}.${image.name.split('.').pop()}`;
-    const { error } = await supabase.storage.from('event-images').upload(filePath, image);
+export async function POST(req: Request) {
+  try {
+    const formData = await req.formData()
+    const title = formData.get('title') as string
+    const description = formData.get('description') as string
+    const location = formData.get('location') as string
+    const category = formData.get('category') as string
+    const price = parseInt(formData.get('price') as string)
+    const startDate = new Date(formData.get('startDate') as string)
+    const endDate = new Date(formData.get('endDate') as string)
+    const availableSeat = parseInt(formData.get('availableSeat') as string)
 
-    if (!error) {
-      imageUrl = supabase.storage.from('event-images').getPublicUrl(filePath).data.publicUrl;
+    const imageFile = formData.get('image') as File
+    let imageUrl = ''
+
+    // Upload image to Supabase
+    if (imageFile) {
+      const buffer = Buffer.from(await imageFile.arrayBuffer())
+      const filePath = `events/${randomUUID()}-${imageFile.name}`
+
+      const { data, error } = await supabase.storage
+        .from('event-images')
+        .upload(filePath, buffer, {
+          contentType: imageFile.type,
+        })
+
+      if (error) {
+        return NextResponse.json({ message: 'Upload gambar gagal', error }, { status: 500 })
+      }
+
+      imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event-images/${filePath}`
     }
+
+    const newEvent = await prisma.event.create({
+      data: {
+        name: title,
+        description,
+        location,
+        category,
+        price,
+        startDate,
+        endDate,
+        availableSeat,
+        imageUrl,
+      },
+    })
+
+    return NextResponse.json(newEvent, { status: 201 })
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json({ error: 'Terjadi kesalahan saat mengirim data.' }, { status: 500 })
   }
-
-  const newEvent = await prisma.event.create({
-    data: {
-      name: title,
-      description: formData.get('description') as string,
-      location: formData.get('location') as string,
-      category: formData.get('category') as string,
-      price: parseInt(formData.get('price') as string),
-      startDate: new Date(formData.get('startDate') as string),
-      endDate: new Date(formData.get('endDate') as string),
-      availableSeat: parseInt(formData.get('availableSeat') as string),
-      image: imageUrl,
-      organizerId: session.user.id,
-    },
-  });
-
-  return NextResponse.json(newEvent, { status: 201 });
 }
