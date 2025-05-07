@@ -1,9 +1,10 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "./prisma"
+import prisma from "./prisma"
+// Removed incorrect import of authOptions
 
-export const authOptions = {
+const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -12,7 +13,7 @@ export const authOptions = {
     }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: 'jwt' as const,
   },
   callbacks: {
     async session({ session, token }) {
@@ -24,3 +25,9 @@ export const authOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 }
+
+
+export default NextAuth(authOptions)
+export { authOptions as authOptions }
+
+
