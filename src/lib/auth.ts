@@ -1,26 +1,18 @@
-import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "./prisma"
+import { cookies } from 'next/headers'
+import jwt from 'jsonwebtoken'
 
-export const authOptions = {
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
-  session: {
-    strategy: "jwt",
-  },
-  callbacks: {
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub // inject user id ke session
-      }
-      return session
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+export function getUserFromToken() {
+  const token = cookies().get('token')?.value
+  if (!token) return null
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: string
+      email: string
+      role: string
+    }
+    return decoded
+  } catch (err) {
+    return null
+  }
 }

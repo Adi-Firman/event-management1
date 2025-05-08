@@ -17,7 +17,8 @@
     "strict": false,
     "noEmit": true,
     "incremental": true,
-    "module": "CommonJS",
+    "module": "ESNext",
+    "target":"ES2017",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -30,7 +31,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [
     "next-env.d.ts",

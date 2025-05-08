@@ -1,22 +1,41 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 
-// Middleware untuk autentikasi JWT
+// Tambahkan tipe untuk req.user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string
+        email: string
+        role: string
+      }
+    }
+  }
+}
+
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(' ')[1] // Mengambil token dari header Authorization
+  const token = req.headers.authorization?.split(' ')[1]
 
   if (!token) {
     return res.status(403).json({ error: 'Access Denied: No Token Provided' })
   }
 
-  // Verifikasi token JWT
-  jwt.verify(token, process.env.JWT_SECRET || '', (err: any, user: any) => {
-    if (err) {
-      return res.status(403).json({ error: 'Invalid or Expired Token' })
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: string
+      email: string
+      role: string
     }
-    
-    // Menambahkan informasi user ke request
-    req.user = user
+
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role
+    }
+
     next()
-  })
+  } catch (err) {
+    res.status(403).json({ error: 'Invalid or Expired Token' })
+  }
 }
