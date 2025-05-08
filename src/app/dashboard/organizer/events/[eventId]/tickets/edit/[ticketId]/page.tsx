@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Alert } from "@/components/ui/alert"
 
 export default function EditTicketPage({ params }: { params: { eventId: string; ticketId: string } }) {
   const router = useRouter()
@@ -69,9 +69,8 @@ export default function EditTicketPage({ params }: { params: { eventId: string; 
       <h1 className="text-2xl font-bold">Edit Tiket</h1>
 
       {error && (
-        <Alert variant="destructive">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+        <Alert variant="destructive" title="Error">
+          {error}
         </Alert>
       )}
 
